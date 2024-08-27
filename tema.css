@@ -1,0 +1,55 @@
+:root {
+    --blue: ;
+    --blue-light1: ;
+    --blue-light2: ;
+    --blue-light3: ;
+    --blue-dark1: ;
+    --blue-dark2: ;
+    --blue-dark3: ;
+    --green: ;
+    --green-light1: ;
+    --green-light2: ;
+    --green-light3: ;
+    --green-dark1: ;
+    --green-dark2: ;
+    --green-dark3: ;
+    --red: ;
+    --red-light1: ;
+    --red-light2: ;
+    --red-light3: ;
+    --red-dark1: ;
+    --red-dark2: ;
+    --red-dark3: ;
+
+    --theme: ;
+}
+
+.redTheme:root {
+    --mainColor: var(--red);
+    --mainColor-light1: var(--red-light1);
+    --mainColor-light2: var(--red-light2);
+    --mainColor-light3: var(--red-light3);
+    --mainColor-dark1: var(--red-dark1);
+    --mainColor-dark2: var(--red-dark2);
+    --mainColor-dark3: var(--red-dark3);
+}
+
+.greenTheme:root {
+    --mainColor: var(--green);
+    --mainColor-light1: var(--green-light1);
+    --mainColor-light2: var(--green-light2);
+    --mainColor-light3: var(--green-light3);
+    --mainColor-dark1: var(--green-dark1);
+    --mainColor-dark2: var(--green-dark2);
+    --mainColor-dark3: var(--green-dark3);
+}
+
+.blueTheme:root {
+    --mainColor: var(--blue);
+    --mainColor-light1: var(--blue-light1);
+    --mainColor-light2: var(--blue-light2);
+    --mainColor-light3: var(--blue-light3);
+    --mainColor-dark1: var(--blue-dark1);
+    --mainColor-dark2: var(--blue-dark2);
+    --mainColor-dark3: var(--blue-dark3);
+}
