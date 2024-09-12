@@ -1,6 +1,7 @@
 body {
     background-color: #1d2634;
 }
+<<<<<<< HEAD
 * {
     margin: 0;
     padding: 0;
@@ -68,4 +69,16 @@ button:hover {
 
 .hidden {
     display: none;
+=======
+.img {
+    position: relative; 
+}
+
+.img img {
+    width: 100px; 
+    height: auto;  
+    position: absolute; 
+    top: -110px; 
+    left: -15px;
+>>>>>>> b95db0cabf88fca9d59e7404f8b8ec917cb0d6a9
 }

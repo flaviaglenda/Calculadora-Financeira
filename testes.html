@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Testes</title>
+        <script src="prototypes.js"></script>
+        <script src="main.js"></script>
+        <script src="load.js" defer></script>
+        <link rel="stylesheet" href="tema.css">
+        <style>
+            /* {
+                color: white;
+            } */
+            body {
+                background-color: rgb(60, 64, 86);
+            }
+            main {
+                display: flex;
+                gap: 48px;
+            }
+            main div {
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            input, select, button {
+                padding: 2px;
+                border-radius: 5px;
+                margin: 4px 0;
+                border: 2px white solid;
+                outline: none;
+            }
+            select {
+                width: 100%;
+            }
+            button {
+                width: 40%;
+                padding: 6px;
+            }
+            p, label {
+                color: white;
+            }
+            label p {
+                margin: 0;
+            }
+            article {
+                display: flex;
+                gap: 8px;
+            }
+            h3 {
+                margin: 0.4em;
+                color: white;
+            }
+            .buttons {
+                margin-top: 40px;
+                justify-content: start;
+                align-items: center;
+            }
+            .buttons button {
+                width: 100%;
+            }
+        </style>
+        <script>
+            function storagePost() {
+                let name = document.getElementById('storagePost-name').value;
+                let info = document.getElementById('storagePost-info').value;
+                let type = document.getElementById('storagePost-type').value;
+
+                if (name == "") return;
+                if (info == "") return;
+
+                storage.saveInfo(name, info, type)
+
+                if (type == "both") type = "local & session"
+
+                document.getElementById('storagePost-output').innerHTML = `<b>Valor Salvo: </b>${info}<br>
+                <b>Índice: </b>${name}<br>
+                <b>Armazenamento: </b>${type.toUpperCase()}`
+
+                document.getElementById('storagePost-name').value = "";
+                document.getElementById('storagePost-info').value = "";
+            }
+            function storageGet() {
+                let name = document.getElementById('storageGet-name').value;
+                let type = document.getElementById('storageGet-type').value;
+
+                if (name == "") return;
+                if (!type.isIn(['local', 'session'])) return
+
+                let info = storage.getInfo(name, type)
+
+                document.getElementById('storageGet-output').innerHTML = `<b>Valor Obtido: </b> ${info}<br>
+                <b>Índice: </b> ${name}<br>
+                <b>Armazenamento: </b>${type.toUpperCase()}`
+
+                document.getElementById('storageGet-name').value = "";
+            }
+            function storageClearOutput() {
+                document.getElementById('storagePost-output').innerHTML = "";
+                document.getElementById('storageGet-output').innerHTML = "";
+            }
+        </script>
+    </head>
+    <body>
+        <main>
+            <div>
+                <h3>Postar</h3>
+                <article>
+                    <label>
+                        <p>Nome:</p>
+                        <input type="text" id="storagePost-name" pattern="[a-zA-Z0-9]{1,}">
+                    </label>
+                    <label>
+                        <p>Informação:</p>
+                        <input type="text" id="storagePost-info" pattern="[a-zA-Z0-9]{1,}">
+                    </label>
+                </article>
+                <select id="storagePost-type">
+                    <option value="local">Local</option>
+                    <option value="session">Session</option>
+                    <option value="both">Both</option>
+                </select>
+                <button type="button" onclick="storagePost()">Enviar</button>
+                <p id="storagePost-output"></p>
+            </div>
+            <div>
+                <h3>Resgatar</h3>
+                <article>
+                    <label>
+                        <p>Nome:</p>
+                        <input type="text" id="storageGet-name" pattern="[a-zA-Z0-9]{1,}">
+                    </label>
+                </article>
+                <select id="storageGet-type">
+                    <option value="local">Local</option>
+                    <option value="session">Session</option>
+                </select>
+                <button type="button" onclick="storageGet()">Obter</button>
+                <p id="storageGet-output"></p>
+            </div>
+            <div class="buttons">
+                <button onclick="storageClearOutput()">Limpar saídas</button>
+                <button onclick="storageClearOutput(); storage.clear()">Limpar armazenamento e saídas</button>
+            </div>
+        </main>
+    </body>
+</html>
