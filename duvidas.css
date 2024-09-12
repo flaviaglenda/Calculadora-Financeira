@@ -104,7 +104,7 @@ body {
   .main-container {
     grid-area: main;
     overflow-y: auto;
-    padding: 20px 20px;
+    padding: 30px 30px;
     color: rgba(255, 255, 255, 0.95);
   }
   
@@ -172,6 +172,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  #divtexto{
+    background-color: #1d2634;
+   
+
+  }
+
+  #imggrafico{
+    float: right;
+    margin-right: 15px;
+    margin-left: 2%;
+
+  }
+
+  p{
+    font-size: 18px;
+  }
+
+  h3{
+    font-size: 21px;
   }
   
   /* ---------- MEDIA QUERIES ---------- */
