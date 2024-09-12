@@ -115,9 +115,9 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 70px;
+  padding: 35px;
   border-radius: 5px;
-  width: 200px; /* Ajuste a largura conforme necessário */
+  width: 20%; /* Ajuste a largura conforme necessário */
 }
 
 .card-inner {
@@ -139,12 +139,76 @@ body {
 }
 
 .card-inner h3 {
-  font-size: 25px; /* Tamanho do título */
+  font-size: 20px; /* Tamanho do título */
+}
+
+.card h1 {
+  font-size: 24px;
 }
 
 .card-inner .material-icons-outlined, 
 .card-inner i {
   font-size: 40px; /* Aumenta o tamanho dos ícones */
+}
+
+main form, main ul {
+  margin: 0 25px;
+}
+
+main form label {
+  display: inline-block;
+  width: 5em;
+  text-align: end;
+}
+
+.inputs-radiolabel {
+  margin: 10px 0;
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  margin-left: 4em;
+  width: 5em;
+}
+
+.inputs-radiolabel label {
+  text-align: left;
+}
+
+input[type=radio] {
+  width: 1em;
+}
+
+form button[type=submit] {
+  margin: 0 8em;
+  padding: 0.3em 0.5em;
+}
+
+.transactionButton img {
+  width: 1em;
+  height: 1em;
+  aspect-ratio: 1/1 ;
+}
+
+#bankTransactionsDisplay li {
+  display: grid;
+  grid-template-columns: 6fr 4fr 3fr 3fr 1fr;
+  padding: 0.5em;
+  border-radius: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+#bankTransactionsDisplay button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  filter: invert(100%);
+}
+
+.inputTransaction {
+  background-color: green;
+}
+
+.outputTransaction {
+  background-color: red;
 }
 
 /* ---------- CHARTS ---------- */
