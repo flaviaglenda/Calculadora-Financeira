@@ -1,21 +1,14 @@
 body {
-    background-color: #1d2634;
-}
-<<<<<<< HEAD
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    margin: 0; 
+    padding: 0; 
+    width: 100%; 
     color: #ffffff;
+    background-color: #1d2634;
 }
 
 header {
-  
     color: white;
     padding: 10px 0;
     text-align: center;
@@ -38,10 +31,19 @@ nav ul li a {
 }
 
 main {
-    margin: 20px;
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: center;
+    width: 100%; 
 }
 
 section {
+    margin: 0;
+    padding: 20px; 
+    width: 100%;
+    max-width: 100%; 
+    flex: 1 1 100%;
     text-decoration: none;
     background-color: rgba(255, 255, 255, 0);
     padding: 20px;
@@ -49,12 +51,12 @@ section {
     border-radius: 5px;
     box-shadow: 0 7px 17px rgba(255, 255, 255, 0.1);
 }
+
 section:hover {
     box-shadow: 0 10px 20px rgba(255, 255, 255, 0.23);
 }
 
 button {
-
     background-color: #ffffff1e;
     color: white;
     padding: 10px 15px;
@@ -74,14 +76,13 @@ button:hover {
 .img {
     height: 30px;
     width: 30px;
-    position: relative; 
+    position: relative;
 }
 
 .img img {
-    width: 100px; 
-    height: auto;  
-    position: absolute; 
-    top: -110px; 
+    width: 100px;
+    height: auto;
+    position: absolute;
+    top: -110px;
     left: -15px;
->>>>>>> b95db0cabf88fca9d59e7404f8b8ec917cb0d6a9
 }
