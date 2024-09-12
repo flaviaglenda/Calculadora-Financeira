@@ -43,34 +43,37 @@ main {
 
 section {
     text-decoration: none;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 7px 17px rgba(255, 255, 255, 0.1);
+}
+section:hover {
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.23);
 }
 
-#ferramentas {
-    text-decoration: none;
-    
-}
 button {
-    background-color: #1d2634;
+
+    background-color: #ffffff1e;
     color: white;
     padding: 10px 15px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 button:hover {
-    background-color: #17253c;
+    background-color: #5473a3;
 }
 
 .hidden {
     display: none;
-=======
+}
+
 .img {
+    height: 30px;
+    width: 30px;
     position: relative; 
 }
 
