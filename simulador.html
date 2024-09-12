@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>InovaPay</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./index.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="inicio.css">
+  </head>
+</body>
+    <div class="grid-container">
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined">search</span>
+        </div>
+        <div class="header-right">
+          <span class="material-icons-outlined">notifications</span>
+          <span class="material-icons-outlined">email</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      </header>
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+        </div>
+
+        <ul class="sidebar-list">
+          <li class="sidebar-list-item">
+            <div class="img">
+              <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="">
+            </div>
+            <a href="../index.html">
+              <span class="material-icons-outlined"><i class="bi bi-house-door"></i></span> Home
+          </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="./inicio.html">
+              <span class="material-icons-outlined">inventory_2</span> Despesas
+            </a>
+          </li>
+          <li class="sidebar-list-item">
+            <a href="./duvidas.html">
+              <span class="material-icons-outlined">category</span> Educação
+          </li>
+    
+          <li class="sidebar-list-item">
+            <a href="./simulador.html">
+              <span class="material-icons-outlined">poll</span> Simulador
+            </a>
+          </li>
+        </ul>
+      </aside>
