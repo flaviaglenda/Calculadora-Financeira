@@ -7,51 +7,54 @@
     <title>Document</title>
     <script src="main.js"></script>
 </head>
-<body>
-  <div id="corpo">
-    <div id="corpodiv">
-      <div id="titulo">
-        <div class="grid-container">
-          <header class="header">
-            <div class="menu-icon" onclick="openSidebar()">
-              <span class="material-icons-outlined">menu</span>
-            </div>
-            <div class="header-left">
-              <span class="material-icons-outlined">IMG</span>
-            </div>
-            <div class="header-right">
-              <span class="material-icons-outlined">notifications</span>
-              <span class="material-icons-outlined">email</span>
-              <span class="material-icons-outlined">account_circle</span>
-            </div>
-          </header>
+</body>
+<div class="grid-container">
+  <header class="header">
+    <div class="menu-icon" onclick="openSidebar()">
+      <span class="material-icons-outlined">menu</span>
+    </div>
+    <div class="header-left">
+      <span class="material-icons-outlined">search</span>
+    </div>
+    <div class="header-right">
+      <span class="material-icons-outlined">notifications</span>
+      <span class="material-icons-outlined">email</span>
+      <span class="material-icons-outlined">account_circle</span>
+    </div>
+  </header>
+  <aside id="sidebar">
+    <div class="sidebar-title">
+      <div class="sidebar-brand">
+      </div>
+      <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
 
-          <aside id="sidebar">
-            <div class="sidebar-title">
-              <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
-            </div>
-            <ul class="sidebar-list">
-              <li class="sidebar-list-item">
-                <a href="#" target="_blank">
-                  <span class="material-icons-outlined"><i class="bi bi-house-door"></i></span> Home
-                </a>
-              </li>
-              <li class="sidebar-list-item">
-                <a href="#" target="_blank">
-                  <span class="material-icons-outlined">inventory_2</span> Despesas
-                </a>
-              </li>
-              <li class="sidebar-list-item">
-                <a href="#" target="_blank">
-                <span class="material-icons-outlined">category</span> Educação
-              </li>
-              <li class="sidebar-list-item">
-                <a href="#" target="_blank">
-                  <span class="material-icons-outlined">poll</span> Simulador
-                </a>
-              </li>
-            </ul>
-          </aside>
+    <ul class="sidebar-list">
+      <li class="sidebar-list-item">
+        <div class="img">
+          <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="">
+        </div>
+        <a href="../index.html">
+          <span class="material-icons-outlined"><i class="bi bi-house-door"></i></span> Home
+      </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a href="./inicio.html">
+          <span class="material-icons-outlined">inventory_2</span> Despesas
+        </a>
+      </li>
+      <li class="sidebar-list-item">
+        <a href="./duvidas.html">
+          <span class="material-icons-outlined">category</span> Educação
+      </li>
+
+      <li class="sidebar-list-item">
+        <a href="./simulador.html">
+          <span class="material-icons-outlined">poll</span> Simulador
+        </a>
+      </li>
+    </ul>
+  </aside>
             <main class="main-container">
               <div class="main-cards">
                 <h1>O que é juros</h1>
