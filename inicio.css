@@ -41,59 +41,63 @@ body {
 }
 
 /* ---------- SIDEBAR ---------- */
+header {
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+}
+
 #sidebar {
-  grid-area: sidebar;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px; 
   height: 100%;
-  background-color: #263043;
-  overflow-y: auto;
-  transition: all 0.5s;
+  background-color: #1a1e28; 
+  padding-top: 20px;
+  z-index: 1000; 
 }
 
-.sidebar-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px;
-  margin-bottom: 30px;
-}
-
-.sidebar-title > span {
-  display: none;
-}
-
-.sidebar-brand {
-  margin-top: 15px;
-  font-size: 20px;
-  font-weight: 700;
+.sidebar-brand img {
+  margin-left: 20px;
+  width: 110px; 
+  height: auto;
 }
 
 .sidebar-list {
-  padding: 0;
-  margin-top: 15px;
   list-style-type: none;
+  padding: 0;
 }
 
-.sidebar-list-item {
-  padding: 20px;
-  font-size: 18px;
+.sidebar-list li {
+  margin-bottom: 20px;
 }
 
-.sidebar-list-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-}
-
-.sidebar-list-item > a {
+.sidebar-list li a {
   text-decoration: none;
-  color: #9e9ea4;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
 }
 
+.sidebar-list li a i,
+.sidebar-list li a span {
+  margin-right: 10px;
+  font-size: 35px; 
+}
+
+.sidebar-list li a:hover {
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+  
 .sidebar-responsive {
   display: inline !important;
   position: absolute;
-  z-index: 12 !important;
 }
-
 /* ---------- MAIN ---------- */
 .main-container {
   grid-area: main;

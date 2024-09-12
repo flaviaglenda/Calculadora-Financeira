@@ -15,53 +15,35 @@
     <script src="load.js" defer></script>
   </head>
   <body>
-    <div class="grid-container">
-      <header class="header">
-        <div class="menu-icon" onclick="openSidebar()">
-          <span class="material-icons-outlined">menu</span>
-        </div>
-        <div class="header-left">
-          <span class="material-icons-outlined">search</span>
-        </div>
-        <div class="header-right">
-          <span class="material-icons-outlined">notifications</span>
-          <span class="material-icons-outlined">email</span>
-          <span class="material-icons-outlined">account_circle</span>
-        </div>
-      </header>
-      <aside id="sidebar">
-        <div class="sidebar-title">
+    <aside id="sidebar">
+      <div class="sidebar-header">
           <div class="sidebar-brand">
+              <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="InovaPay Logo">
           </div>
-          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
-        </div>
-
-        <ul class="sidebar-list">
-          <li class="sidebar-list-item">
-            <div class="img">
-              <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="">
-            </div>
-            <a href="./index.html">
-              <span class="material-icons-outlined"><i class="bi bi-house-door"></i></span> Home
-          </a>
+      </div>
+      <ul class="sidebar-list">
+          <li class="sidebar-item">
+              <a href="./index.html">
+                  <i class="bi bi-house-door"></i> Home
+              </a>
           </li>
-          <li class="sidebar-list-item">
-            <a href="./inicio.html">
-              <span class="material-icons-outlined">inventory_2</span> Despesas
-            </a>
+          <li class="sidebar-item">
+              <a href="./inicio.html">
+                  <span class="material-icons-outlined">inventory_2</span> Despesas
+              </a>
           </li>
-          <li class="sidebar-list-item">
-            <a href="./duvidas.html">
-              <span class="material-icons-outlined">category</span> Educação
+          <li class="sidebar-item">
+              <a href="./duvidas.html">
+                  <span class="material-icons-outlined">category</span> Educação
+              </a>
           </li>
-    
-          <li class="sidebar-list-item">
-            <a href="./simulador.html">
-              <span class="material-icons-outlined">poll</span> Simulador
-            </a>
+          <li class="sidebar-item">
+              <a href="./simulador.html">
+                  <span class="material-icons-outlined">poll</span> Simulador
+              </a>
           </li>
-        </ul>
-      </aside>
+      </ul>
+  </aside>
       <main class="main-container">
         <div class="main-title">
           <h2>DESPESAS</h2>

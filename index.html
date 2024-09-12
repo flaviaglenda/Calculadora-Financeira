@@ -11,56 +11,60 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="inicio.css">
-  </head>
-  <body>
-    <div class="grid-container">
-      <header class="header">
-        <div class="menu-icon" onclick="openSidebar()">
-          <span class="material-icons-outlined">menu</span>
-        </div>
-        <div class="header-left">
-          <span class="material-icons-outlined">search</span>
-        </div>
-        <div class="header-right">
-          <span class="material-icons-outlined">notifications</span>
-          <span class="material-icons-outlined">email</span>
-          <span class="material-icons-outlined">account_circle</span>
-        </div>
-      </header>
-      <aside id="sidebar">
-        <div class="sidebar-title">
-          <div class="sidebar-brand">
-          </div>
-          <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
-        </div>
+</head>
+<body>
 
-        <ul class="sidebar-list">
-          <li class="sidebar-list-item">
-            <div class="img">
-              <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="">
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="InovaPay Logo">
             </div>
-            <a href="../index.html">
-              <span class="material-icons-outlined"><i class="bi bi-house-door"></i></span> Home
-          </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="./inicio.html">
-              <span class="material-icons-outlined">inventory_2</span> Despesas
-            </a>
-          </li>
-          <li class="sidebar-list-item">
-            <a href="./duvidas.html">
-              <span class="material-icons-outlined">category</span> Educação
-          </li>
-    
-          <li class="sidebar-list-item">
-            <a href="./simulador.html">
-              <span class="material-icons-outlined">poll</span> Simulador
-            </a>
-          </li>
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-item">
+                <a href="./index.html">
+                    <i class="bi bi-house-door"></i> Home
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="./inicio.html">
+                    <span class="material-icons-outlined">inventory_2</span> Despesas
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="./duvidas.html">
+                    <span class="material-icons-outlined">category</span> Educação
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="./simulador.html">
+                    <span class="material-icons-outlined">poll</span> Simulador
+                </a>
+            </li>
         </ul>
-      </aside>
-      <main>
+    </aside>
+
+    <div class="context">
+      <h1>Bem vindo ao Inova Pay!</h1>
+      <p>Sua futuro financeiro começa aqui! </p>
+  </div>
+
+
+<div class="area" >
+          <ul class="circles">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+          </ul>
+  </div >
+
         <section id="conceitos-basicos">
             <h2>Conceitos Básicos de Educação Financeira</h2>
             <p>Educação financeira é o processo de adquirir conhecimento sobre como administrar seu dinheiro de forma eficaz.</p>
@@ -83,16 +87,7 @@
                 <li>Faça uma lista de compras antes de ir ao mercado.</li>
             </ul>
         </section>
-
-        <section id="ferramentas">
-            <h2>Ferramentas Úteis</h2>
-            <p>Use estas ferramentas para melhorar seu controle financeiro:</p>
-            <ul>
-                <li>Planilhas de orçamento</li>
-                <li>Aplicativos de controle financeiro</li>
-                <li>Calculadoras de investimentos</li>
-            </ul>
-        </section>
     </main>
-  </body>
+
+</body>
 </html>
