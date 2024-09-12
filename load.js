@@ -1,1 +1,2 @@
-theme.load()
+theme.load();
+bank.load();
