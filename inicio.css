@@ -134,15 +134,15 @@ header {
 }
 
 .card:first-child {
-  background-color: #4FC9D0;
+  background-color: #18cf49
 }
 
 .card:nth-child(2) {
-  background-color: #4FC9D0;
+  background-color: #f02400;
 }
 
 .card:nth-child(3) {
-  background-color: #18cf49;
+  background-color: #4FC9D0;
 }
 
 .card-inner h3 {
