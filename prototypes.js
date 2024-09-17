@@ -232,3 +232,11 @@ Number.prototype.formatInMoneyBR = function formatInMoneyBR(useBeforePlacer = tr
 
     return beforePlacer + integer + "," + decimal;
 }
+
+String.prototype.isEmpty = function isEmpty(ignore = "") {
+    if (this.split(ignore).join('').length == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}

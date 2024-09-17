@@ -1,12 +1,8 @@
-    // Console Style
+/*
+    Este arquivo DEPENDE da coleção de protótipos.
+*/
 
-const styleC = {};
-styleC.simple = "color: ";
-styleC.grey = "color: grey";
-styleC.code = "color: gold; text-decoration: underline";
-styleC.type = "color: lightblue; text-decoration: underline";
-styleC.var = "color: mediumpurple; text-decoration: underline";
-styleC.number = "color: springgreen"
+    // Console Style
 
 const consoleMessages = {}
 
@@ -287,8 +283,8 @@ const search = {};
 /**
  * Procura por um elemento ou vários na página.
  * @param {String} target 
- * @param {"id"|"class"|"tag"|"name"} type 
- * @returns {HTMLElement|HTMLCollection}
+ * @param {"id"|"class"|"tag"|"name"|"query"} type 
+ * @returns {HTMLElement|HTMLCollection|NodeList}
  */
 search.element = function searchElement(target, type) { // ADICIONAR FILTRO, objeto com: ignoreClass: [], ignoreId: [], ignoreName: [], ignoreTag: [], ignoreProperty: { property: value|"all" }; Adicionar tipo de query (queryAll mas se achar somente um elemento, retorna ele)
     if (typeof target !== "string") return
@@ -297,13 +293,15 @@ search.element = function searchElement(target, type) { // ADICIONAR FILTRO, obj
 
     switch (type) {
         case "class":
-            return document.getElementsByClassName(target)
+            return document.getElementsByClassName(target);
         case "id":
-            return document.getElementById(target)
+            return document.getElementById(target);
         case "tag":
-            return document.getElementsByTagName(target)
+            return document.getElementsByTagName(target);
         case "name":
-            return document.getElementsByTagName(target)
+            return document.getElementsByTagName(target);
+        case "query":
+            return document.querySelectorAll(target);
     }
 }
 
@@ -337,22 +335,37 @@ function navigateTo(destination) {
 
 const bank = {}
 
-// Alguma mecânica de configuração pra salvar no armazenamento se vai abrir o registro local de transações ou não.
-
 bank.transactionList = [];
 bank.loaded = false;
 bank.removeButton = {
     type: "text",
-    content: "Remover"
+    content: "Remover",
+    clickEvent: (transaction) => {
+        transaction.remove();
+    }
+}
+bank.editButton = {
+    type: "text",
+    content: "Editar",
+    clickEvent: (transaction) => { return }
 }
 
 bank.transaction = class Transaction {
-    constructor(name, value, date, direction, configs = {existentID: undefined, storage: 'session'}) {
+    /**
+     * 
+     * @param {string} name 
+     * @param {number} value 
+     * @param {Date} date 
+     * @param {"in"|"out"} direction 
+     * @param {{
+     *      existentID?: string
+     * }} configs 
+     */
+    constructor(name, value, date, direction, configs = { existentID: undefined }) {
         this.name = name;
         this.value = value;
         this.date = date;
         this.direction = direction;
-        this.storage = configs.storage;
 
         let actDate = new Date();
         let id = `${actDate.getFullYear()}${(actDate.getMonth() + 1).toString().fillUntil('0', 2, 'before')}${actDate.getDate().toString().fillUntil('0', 2, 'before')}-${actDate.getHours().toString().fillUntil('0', 2, 'before')}${actDate.getMinutes().toString().fillUntil('0', 2, 'before')}${actDate.getSeconds().toString().fillUntil('0', 2, 'before')}${actDate.getMilliseconds().toString().slice(0, 2).fillUntil('0', 2, 'before')}`
@@ -362,12 +375,10 @@ bank.transaction = class Transaction {
         // Utilizar existentID somente para load
 
         if (typeof name !== "string" || name == "") this.name = `${actDate.getDate().toString().fillUntil('0', 2, 'before')}-${actDate.getMonth().toString().fillUntil('0', 2, 'before')}-${actDate.getFullYear()}`;
-        if (!name.isBetween(1, 50)) this.name = this.name.slice(0, 50);
+        if (!name.isBetween(1, 50, true)) this.name = this.name.slice(0, 50);
         if (typeof value !== "number") this.value = 1;
         if (value == 0) this.value = 1;
         if (date.constructor !== Date) this.date = new Date();
-        if (typeof this.storage !== 'string') this.storage = 'session';
-        if (!this.storage.isIn(['session', 'local'])) this.storage = 'session';
         if (typeof direction !== "string") this.direction = 'in';
         if (!this.direction.isIn(['in', 'out'])) this.direction = 'in';
 
@@ -397,7 +408,7 @@ bank.transaction = class Transaction {
             switch (key) {
                 case "name":
                     if (typeof newValue !== "string" || newValue == "") return console.log('Nome de tipo inválido'); // Adicionar alertas aqui??? (Nesse caso dava pra ir acumulando todos os erros e no final mostrar um alerta com a lista de erros ne) // Provisoriamente por consoles.logs
-                    if (!newValue.isBetween(1, 50)) return console.log('Nome de tamanho inválido');
+                    if (!newValue.isBetween(1, 50, true)) return console.log('Nome de tamanho inválido');
                     this[key] = newValue;
                     break;
                 case "value":
@@ -412,7 +423,8 @@ bank.transaction = class Transaction {
                     this[key] = newValue;
                     break;
                 case "date":
-                    this[key] = newValue;
+                    this[key] = `${newValue.getDate()}/${newValue.getMonth() + 1}/${newValue.getFullYear()}`;
+                    this.baseDate = newValue;
                     break;
                 case "direction":
                     this[key] = newValue;
@@ -483,7 +495,8 @@ bank.update = function bankUpdate(withLocal = false) {
                 value: document.createElement('span'),
                 direction: document.createElement('span'),
                 date: document.createElement('span'),
-                removeButton: document.createElement('button')
+                removeButton: document.createElement('button'),
+                editButton: document.createElement('button')
             }
 
             let directionClass = ""
@@ -510,18 +523,35 @@ bank.update = function bankUpdate(withLocal = false) {
             subElements.date.appendChild(document.createTextNode(`${transaction.date}`));
             
             subElements.removeButton.classList.add('transactionButton');
+            subElements.removeButton.classList.add('transactionRemoveButton');
             switch (bank.removeButton.type) {
                 case "img":
-                    let removeButtoImg = document.createElement('img');
-                    removeButtoImg.src = bank.removeButton.content;
-                    subElements.removeButton.append(removeButtoImg);
+                    let removeButtonImg = document.createElement('img');
+                    removeButtonImg.src = bank.removeButton.content;
+                    subElements.removeButton.append(removeButtonImg);
                     break;
                 case "text":
                     subElements.removeButton.appendChild(document.createTextNode(bank.removeButton.content));
                     break;
             }
             subElements.removeButton.addEventListener('click', () => {
-                transaction.remove()
+                bank.removeButton.clickEvent(transaction);
+            })
+            
+            subElements.editButton.classList.add('transactionButton');
+            subElements.editButton.classList.add('transactionEditButton');
+            switch (bank.editButton.type) {
+                case "img":
+                    let editButtonImg = document.createElement('img');
+                    editButtonImg.src = bank.editButton.content;
+                    subElements.editButton.append(editButtonImg);
+                    break;
+                case "text":
+                    subElements.editButton.appendChild(document.createTextNode(bank.editButton.content));
+                    break;
+            }
+            subElements.editButton.addEventListener('click', () => {
+                bank.editButton.clickEvent(transaction);
             })
 
             Object.values(subElements).forEach(subElement => { newElement.append(subElement) })
@@ -610,15 +640,17 @@ bank.getTransaction = function bankGetTransaction(id) {
     return foundTransaction;
 }
 
-bank.configForm = function bankConfigForm(formId, resetInputs, zeroErrorCallback) {
+bank.configForm = function bankConfigForm(formId, resetInputs, zeroErrorCallback, emptyErrorCallback) {
+    search.element(formId, 'id').value.pattern = "[0-9\.\,]{1,}";
     search.element(formId, 'id').addEventListener('submit', (event) => {
         event.preventDefault();
         const form = event.target;
-        form.value.pattern = "[0-9\.\,]{1,}";
         form.value.value = form.value.value.replace(',', '.');
 
         if (typeof zeroErrorCallback !== "function") zeroErrorCallback = () => { console.log("Erro: Tentativa de inserir 0 como valor em uma transação.") }
         if (form.value.value == "0") return zeroErrorCallback();
+        if (typeof emptyErrorCallback !== "function") emptyErrorCallback = () => { console.log("Erro: Tentativa de inserir nome vazio.") }
+        if (form.name.value.isEmpty(' ')) return emptyErrorCallback();
 
         bank.newTransaction(form.name.value, Math.round(parseFloat(form.value.value) * 100) / 100, new Date(form.date.value), form.direction.value);
         if (resetInputs) {
@@ -638,19 +670,40 @@ bank.configForm = function bankConfigForm(formId, resetInputs, zeroErrorCallback
  *      resetInputs?: boolean,
  *      automaticDate?: boolean,
  *      removeButton: {
- *          type: string,
- *          content: string
+ *          type: "text"|"img",
+ *          content: string,
+ *          clickEvent: (transaction) => void
  *      },
- *      zeroErrorCallback: () => void
+ *      editButton: {
+ *          type: "text"|"img",
+ *          content: string,
+ *          clickEvent: (transaction) => void
+ *      }
+ *      zeroErrorCallback: () => void,
+ *      emptyErrorCallback: () => void
  * }} config
  */
 bank.config = function bankConfig(config) { // Adicionar opção de alterar nomes de ids e etc.
-    bank.configForm(config.formId, config.resetInputs, config.zeroErrorCallback);
+    bank.configForm(config.formId, config.resetInputs, config.zeroErrorCallback, config.emptyErrorCallback);
     if (config.automaticDate) search.element(config.formId, 'id').date.value = inputs.getDateValue(new Date());
 
-    if (config.removeButton && config.removeButton.type.isIn(['text', 'img'])) {
-        bank.removeButton.type = config.removeButton.type
-        bank.removeButton.content = config.removeButton.content
+    if (config.removeButton) {
+        if (config.removeButton.type.isIn(['text', 'img'])) {
+            bank.removeButton.type = config.removeButton.type;
+            bank.removeButton.content = config.removeButton.content;
+        }
+        if (typeof config.removeButton.clickEvent == "function") {
+            bank.removeButton.clickEvent = config.removeButton.clickEvent;
+        }
+    }
+    if (config.editButton) {
+        if (config.editButton.type.isIn(['text', 'img'])) {
+            bank.editButton.type = config.editButton.type;
+            bank.editButton.content = config.editButton.content;
+        }
+        if (typeof config.editButton.clickEvent == "function") {
+            bank.editButton.clickEvent = config.editButton.clickEvent;
+        }
     }
 }
 
@@ -663,6 +716,13 @@ bank.clear = () => { bank.clearTransactions() }
 bank.interest = {};
 bank.interest.actInterest = undefined;
 
+/**
+ * @param {number} capital 
+ * @param {"simple"|"compound"} type 
+ * @param {number} rate 
+ * @param {number} time
+ * @param {"day"|"week"|"month"|"bimonthly"|"quarter"|"semester"|"year"} timeUnit
+ */
 bank.interest.new = function bankNewInterest(capital, type, rate, time, timeUnit) {
     class Interest {
         /**
@@ -736,7 +796,7 @@ bank.interest.new = function bankNewInterest(capital, type, rate, time, timeUnit
          */
         save(name, date, direction, result) {
             if (typeof name !== "string") return;
-            if (name == "" || !name.isBetween(1, 50)) return;
+            if (name == "" || !name.isBetween(1, 50, true)) return;
             if (date == undefined || date == null) return;
             if (date.constructor !== Date) return;
             if (typeof direction !== "string") return;
@@ -776,6 +836,17 @@ bank.interest.new = function bankNewInterest(capital, type, rate, time, timeUnit
  */
 bank.interest.config = function bankConfigInterest(config) {
     const form = search.element(config.formId, 'id');
+    form.capital.pattern = "[0-9\.\,]{1,}";
+    form.rate.pattern = "[0-9\.\,\%]{1,}";
+    form.time.pattern = "[0-9\.\,]{1,}";
+    form.capital.inputmode = "numeric";
+    form.rate.inputmode = "numeric";
+    form.time.inputmode = "numeric";
+    form.capital.required = true;
+    form.rate.required = true;
+    form.time.required = true;
+    form.type.required = true;
+    form.timeUnit.required = true;
     const outputs = {
         interest: search.element(config.outputIds.interest, 'id'),
         amount: search.element(config.outputIds.amount, 'id'),
@@ -789,19 +860,16 @@ bank.interest.config = function bankConfigInterest(config) {
 
     form.addEventListener('submit', event => {
         event.preventDefault();
-        form.capital.pattern = "[0-9\.\,]{1,}";
-        form.rate.pattern = "[0-9\.\,]{1,}";
-        form.time.pattern = "[0-9\.\,]{1,}";
         form.capital.value = form.capital.value.replace(',', '.');
-        form.rate.value = form.rate.value.replace(',', '.');
+        form.rate.value = form.rate.value.replace(',', '.').replace('%', '');
         form.time.value = form.time.value.replace(',', '.');
 
-        if (typeof zeroErrorCallback !== "function") zeroErrorCallback = () => { console.log("Erro: Tentativa de inserir 0 como valor em uma transação.") }
-        if (form.capital.value == "0") return zeroErrorCallback();
-        if (form.rate.value == "0") return zeroErrorCallback();
-        if (form.time.value == "0") return zeroErrorCallback();
+        if (typeof config.zeroErrorCallback !== "function") zeroErrorCallback = () => { console.log("Erro: Tentativa de inserir 0 como valor em uma transação.") }
+        if (form.capital.value == "0") return config.zeroErrorCallback();
+        if (form.rate.value == "0") return config.zeroErrorCallback();
+        if (form.time.value == "0") return config.zeroErrorCallback();
 
-        bank.interest.actInterest = bank.interest.new(parseFloat(form.capital.value), form.type.value, parseFloat(form.rate.value), parseInt(form.time.value), form.timeUnit.value);
+        bank.interest.actInterest = bank.interest.new(parseFloat(form.capital.value), form.type.value, parseFloat(form.rate.value) / 100, parseInt(form.time.value), form.timeUnit.value);
         const actInterest = bank.interest.actInterest;
         
         if (config.resetInputs) {
@@ -809,7 +877,7 @@ bank.interest.config = function bankConfigInterest(config) {
             form.rate.value = "";
             form.time.value = "";
             if (config.resetTypenUnit) {
-                form.type.value = "";
+                form.type.value = "simple";
                 form.timeUnit.value = "month";
             }
         }
@@ -886,56 +954,338 @@ bank.interest.config = function bankConfigInterest(config) {
     });
 }
 
-    // Pattern Classes
+bank.finance = {};
+bank.finance.actFinance = undefined;
 
-class patternList {
-    constructor() {}
-    write() {
-        Object.values(this).forEach(pattern => {
-            pattern.write()
-        })
+bank.finance.new = function bankNewFinance(capital, initial = 0, rate, time, config = { rateUnit: "year", timeUnit: "month" }) {
+    class Finance {
+        /**
+         * 
+         * @param {number} capital 
+         * @param {number} initial 
+         * @param {number} rate 
+         * @param {number} time 
+         * @param {{
+         *      rateUnit: "month"|"year",
+         *      timeUnit: "month"|"year"
+         * }} config 
+         */
+        constructor(capital, initial = 0, rate, time, config = { rateUnit: "year", timeUnit: "month" }) {
+            this.capital = capital;
+            this.initial = initial;
+            this.rate = rate;
+            this.time = time;
+            this.info = {};
+            
+            if (typeof this.capital !== "number") this.capital = 1000;
+            if (this.capital == 0) this.capital = 1000;
+            if (this.capital < 0) this.capital = Math.abs(this.capital);
+            if (typeof this.initial !== "number") this.initial = 0;
+            if (this.initial < 0) this.initial = Math.abs(this.initial);
+            if (typeof this.rate !== "number") this.rate = 0.1;
+            if (this.rate == 0) this.rate = 0.1;
+            if (this.rate < 0) this.rate = Math.abs(this.rate);
+            if (typeof this.time !== "number") this.time = 10;
+            if (this.time == 0) this.time = 10;
+            if (this.time < 0) this.time = 10;
+            this.time = Math.floor(this.time);
+
+            let calcValue = this.capital - this.initial;
+
+            if (config == undefined) config = {};
+            this.rateUnit = config.rateUnit;
+            this.timeUnit = config.timeUnit;
+            this.info.rate = Math.floor(this.rate * 1000000) / 1000000;
+            this.info.time = this.time;
+            if (typeof this.rateUnit !== "string") this.rateUnit = "year";
+            if (!this.rateUnit.isIn(['year', 'month'])) this.rateUnit = "year";
+            if (this.rateUnit == "year") this.rate = Math.pow(this.rate + 1, 1/12) - 1;
+            if (typeof this.timeUnit !== "string") this.timeUnit = "month";
+            if (!this.timeUnit.isIn(['year', 'month'])) this.timeUnit = "month";
+            if (this.timeUnit == "year") this.time = this.time / 12;
+
+            let ratePow = Math.pow(this.rate + 1, this.time);
+            this.portion = calcValue * this.rate * ratePow / (ratePow - 1);
+            this.value = this.portion * this.time;
+
+            this.history = {};
+            this.history.payment = [];
+            for (let t = 0; t <= this.time ; t++) {
+                this.history.payment.push(this.value - this.portion * t);
+            };
+
+            this.info.totalValue = Math.round(this.value * 100) / 100;
+            this.info.inputValue = Math.round(calcValue * 100) / 100;
+            this.info.difference = Math.round((this.info.totalValue - this.info.inputValue) * 100) / 100;
+            this.info.portion = Math.round(this.portion * 100) / 100;
+            this.info.capital = Math.round(this.capital * 100) / 100;
+            this.info.initial = Math.round(this.initial * 100) / 100;
+            this.info.paymentHistory = [];
+            this.history.payment.forEach(payment => {
+                this.info.paymentHistory.push(Math.round(payment * 100) / 100)
+            });
+
+            bank.finance.actFinance = this;
+        }
+        savePortion(times, name, date) {
+            if (typeof name !== "string") return;
+            if (date.constructor !== Date) return;
+            if (typeof times !== "number" && times !== "all") return;
+            if (times == "all") times = this.time;
+            if (times > this.time) times = this.time;
+
+            new bank.transaction(name, this.info.portion * times, date, 'out');
+        }
     }
+    return new Finance(capital, initial, rate, time, config);
 }
 
-class patternElement {
-    constructor(target, type, rewriteType = "overwrite", value) {
-        this.target = target;
-        this.type = type; // Adicionar query aqui também
-        this.value = value;
-        this.rewriteType = rewriteType;
-        if (!this.rewriteType.isIn(["overwrite", "after", "before"])) this.rewriteType = "overwrite";
+/**
+ * Configura uma página de simulação de finância.
+ * @param {{
+ *      formId: string,
+ *      outputIds: {
+ *          capital: string,
+ *          initial: string,
+ *          rate: string,
+ *          time: string,
+ *          rateUnit: string,
+ *          timeUnit: string,
+ *          totalValue: string,
+ *          inputValue: string,
+ *          difference: string,
+ *          portion: string,
+ *          paymentHistory: string
+ *      },
+ *      zeroErrorCallback: () => void,
+ *      resetInputs: boolean,
+ *      resetTypenUnit: boolean,
+ *      ignoreTimeZero: boolean
+ * }} config 
+ */
+bank.finance.config = function bankConfigFinance(config) {
+    const form = search.element(config.formId, 'id');
+    
+    if (form.capital) form.capital.pattern = "[0-9\.\,]{1,}";
+    if (form.initial) form.initial.pattern = "[0-9\.\,]{1,}";
+    if (form.rate) form.rate.pattern = "[0-9\.\,\%]{1,}";
+    if (form.time) form.time.pattern = "[0-9\.\,]{1,}";
+    if (form.capital) form.capital.inputmode = "numeric";
+    if (form.initial) form.initial.inputmode = "numeric";
+    if (form.rate) form.rate.inputmode = "numeric";
+    if (form.time) form.time.inputmode = "numeric";
+    if (form.rateUnit) form.rateUnit.value = "year";
+    if (form.timeUnit) form.timeUnit.value = "month";
+    if (form.capital) form.capital.required = true;
+    if (form.rate) form.rate.required = true;
+    if (form.time) form.time.required = true;
+    if (form.rateUnit) form.rateUnit.required = true;
+    if (form.timeUnit) form.timeUnit.required = true;
+
+    const outputs = {
+        capital: search.element(config.outputIds.capital, 'id'),
+        initial: search.element(config.outputIds.initial, 'id'),
+        rate: search.element(config.outputIds.rate, 'id'),
+        time: search.element(config.outputIds.time, 'id'),
+        rateUnit: search.element(config.outputIds.rateUnit, 'id'),
+        timeUnit: search.element(config.outputIds.timeUnit, 'id'),
+        totalValue: search.element(config.outputIds.totalValue, 'id'),
+        inputValue: search.element(config.outputIds.inputValue, 'id'),
+        difference: search.element(config.outputIds.difference, 'id'),
+        portion: search.element(config.outputIds.portion, 'id'),
+        paymentHistory: search.element(config.outputIds.paymentHistory, 'id'),
     }
-    write() {
-        function posValue(element, value, type) {
-            if (type == "before") return value + element.innerHTML;
-            if (type == "after") return element.innerHTML + value;
-            return value;
+
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        form.capital.value = form.capital.value.replace(',', '.');
+        form.initial.value = form.initial.value.replace(',', '.');
+        form.rate.value = form.rate.value.replace(',', '.').replace('%', '');
+        form.time.value = form.time.value.replace(',', '.');
+
+        if (typeof config.zeroErrorCallback !== "function") config.zeroErrorCallback = () => { console.log('Erro: Tentativa de inserir 0 em uma financia.') }
+        if (form.capital.value == "0") return config.zeroErrorCallback();
+        if (form.rate.value == "0") return config.zeroErrorCallback();
+        if (form.time.value == "0") return config.zeroErrorCallback();
+
+        if (form.rateUnit == undefined) form.rateUnit = {};
+        if (form.timeUnit == undefined) form.timeUnit = {};
+        if (form.rateUnit.value == undefined) form.rateUnit.value = "year";
+        if (form.timeUnit.value == undefined) form.timeUnit.value = "month";
+
+        bank.finance.actFinance = bank.finance.new(parseFloat(form.capital.value), parseFloat(form.initial.value), parseFloat(form.rate.value) / 100, parseInt(form.time.value), { rateUnit: form.rateUnit.value, timeUnit: form.timeUnit.value });
+
+        if (config.resetInputs) {
+            form.capital.value = "";
+            form.initial.value = "";
+            form.rate.value = "";
+            form.time.value = "";
+            if (config.resetTypenUnit) {
+                form.rateUnit.value = "year";
+                form.timeUnit.value = "month";
+            }
         }
+
+        Object.entries(outputs).forEach(output => {
+            let actFinance = bank.finance.actFinance;
+            let outputName = output[0];
+            let outputElement = output[1];
+
+            if (outputElement == null) return;
+
+            if (outputName.isIn(['capital', 'initial', 'totalValue', 'inputValue', 'difference', 'portion'])) outputElement.write(actFinance.info[outputName].formatInMoneyBR(true));
+            if (outputName == 'rate') outputElement.write(Math.round(actFinance.info.rate * 10000) / 100 + "%");
+            if (outputName == 'time') {
+                let singular = false;
+                if (actFinance[outputName] == 1) singular = true;
+
+                let unit = "";
+                if (actFinance.timeUnit == "year") {
+                    if (singular) unit = " ano";
+                    if (!singular) unit = " anos";
+                }
+                if (actFinance.timeUnit == "month") {
+                    if (singular) unit = " mês";
+                    if (!singular) unit = " meses";
+                }
+
+                outputElement.write(actFinance.info.time + unit);
+            }
+            if (outputName.isIn(['timeUnit', 'rateUnit'])) {
+
+                if (actFinance[outputName] == "month") {
+                    outputElement.write('Mês');
+                }
+                if (actFinance[outputName] == "year") {
+                    outputElement.write('Ano');
+                }
+
+            }
+            if (outputName == "paymentHistory") {
+                outputElement.write("");
+                actFinance.history.payment.forEach((payment, index) => {
+                    let newListElement = document.createElement('li');
+
+                    let monthSpan = document.createElement('span');
+                    let paidSpan = document.createElement('span');
+
+                    monthSpan.appendChild(document.createTextNode(index));
+                    paidSpan.appendChild(document.createTextNode(actFinance.info.paymentHistory[index]));
+
+                    newListElement.append(monthSpan);
+                    newListElement.append(paidSpan);
+
+                    outputElement.append(newListElement);
+                })
+            }
+        })
+    })
+}
+
+    // Pattern Classes
+
+const pattern = {};
+
+pattern.element = class patternElement {
+    /**
+     * 
+     * @param {string} target 
+     * @param {"id"|"class"|"name"|"tag"|"query"} type 
+     * @param {string|HTMLElement[]} content 
+     * @param {"write"|"append"} action 
+     * @param {{
+     *      rewriteType?: "overwrite"|"after"|"before",
+     *      ignoreClasses?: string[]
+     * }} config 
+     * @returns 
+     */
+    constructor(target, type, content, action, config = { rewriteType: "overwrite", ignoreClasses: [] }) {
+        this.target = target;
+        this.type = type;
+        this.content = content;
+        this.action = action;
+        this.config = config;
+
+        if (typeof target !== "string" || target.length == 0) return;
+        if (typeof target !== "string") return;
+        if (!type.isIn(['id', 'class', 'name', 'tag', 'query'])) return;
+        if (typeof action !== "string") return;
+        if (!action.isIn(['write', 'append'])) return;
+        if (this.config.ignoreClasses == undefined || this.config.ignoreClasses.constructor !== Array) this.config.ignoreClasses = [];
+        if (this.config.rewriteType == undefined || typeof this.config.rewriteType !== "string") this.config.rewriteType = "overwrite";
+        if (!this.config.rewriteType.isIn(['overwrite', 'before', 'after'])) this.config.rewriteType = "overwrite";
+    }
+    apply() {
+        let configs = this.config
+        let action = function action(element, content, action) {
+            if (action == "write") {
+                element.write(content, configs.rewriteType);
+            }
+            if (action == "append") {
+                if (content == undefined) return;
+                if (content.constructor !== Array) return;
+                content.forEach(subElement => {
+                    try {
+                        element.append(subElement);
+                    } catch(err) {
+                        element.appendChild(subElement);
+                    }
+                })
+            }
+        }
+        let elements = undefined
         switch (this.type) {
+            case "class":
+                elements = document.getElementsByClassName(this.target);
+                elements.forEach(element => {
+                    action(element, this.content, this.action);
+                })
+                break;
             case "id":
                 let element = document.getElementById(this.target);
-                if (!element) return;
-                if (!element.classList) return;
-                this.value = posValue(element, this.value, this.rewriteType);
-                if (element.classList.contains('ignorePatternWrite')) return;
-                element.innerHTML = this.value
+                if (element == null) return;
+                action(element, this.content, this.action);
                 break;
-            case "class":
-                document.getElementsByClassName(this.target).forEach(element => {
-                    this.value = posValue(element, this.value, this.rewriteType);
-                    if (element.classList.contains('ignorePatternWrite')) return;
-                    element.innerHTML = this.value}
-                )
+            case "name":
+                elements = document.getElementsByName(this.target);
+                elements.forEach(element => {
+                    action(element, this.content, this.action);
+                })
+                break;
+            case "query":
+                elements = document.querySelectorAll(this.target);
+                elements.forEach(element => {
+                    action(element, this.content, this.action);
+                })
                 break;
             case "tag":
-                document.getElementsByTagName(this.target).forEach(element => {
-                    this.value = posValue(element, this.value, this.rewriteType);
-                    if (element.classList.contains('ignorePatternWrite')) return;
-                    element.innerHTML = this.value}
-                )
+                elements = document.getElementsByTagName(this.target);
+                elements.forEach(element => {
+                    action(element, this.content, this.action);
+                })
                 break;
             default:
                 break;
         }
+    }
+}
+
+pattern.elementList = class patternElementList {
+    constructor(...patternElements) {
+        this.elements = [];
+        patternElements.forEach(patternElement => {
+            if (patternElement.constructor == pattern.element) this.elements.push(patternElement);
+        })
+    }
+    append(...patternElements) {
+        patternElements.forEach(patternElement => {
+            if (patternElement.constructor == pattern.element) this.elements.push(patternElement);
+        })
+    }
+    apply() {
+        this.elements.forEach(element => {
+            element.apply();
+        })
     }
 }

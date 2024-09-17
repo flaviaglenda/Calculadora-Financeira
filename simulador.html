@@ -1,44 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
-    <title>InovaPay</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="./index.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link rel="stylesheet" href="inicio.css">
-  </head>
-</body>
-<aside id="sidebar">
-  <div class="sidebar-header">
-      <div class="sidebar-brand">
-          <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="InovaPay Logo">
-      </div>
-  </div>
-  <ul class="sidebar-list">
-      <li class="sidebar-item">
-          <a href="./index.html">
-              <i class="bi bi-house-door"></i> Home
-          </a>
-      </li>
-      <li class="sidebar-item">
-          <a href="./inicio.html">
-              <span class="material-icons-outlined">inventory_2</span> Despesas
-          </a>
-      </li>
-      <li class="sidebar-item">
-          <a href="./duvidas.html">
-              <span class="material-icons-outlined">category</span> Educação
-          </a>
-      </li>
-      <li class="sidebar-item">
-          <a href="./simulador.html">
-              <span class="material-icons-outlined">poll</span> Simulador
-          </a>
-      </li>
-  </ul>
-</aside>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./index.css">
+        <title>InovaPay</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="./index.js" defer></script>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+        <link rel="stylesheet" href="./inicio.css">
+        <link rel="stylesheet" href="./tema.css">
+        <script src="./prototypes.js"></script>
+        <script src="./main.js"></script>
+        <script src="./config.js"></script>
+        <script src="./load.js"></script>
+    </head>
+    <body>
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="./img/LOGO BRANCA SEM FUNDO.png" alt="InovaPay Logo">
+                </div>
+            </div>
+            <ul class="sidebar-list">
+                <li class="sidebar-item">
+                    <a href="./index.html">
+                        <i class="bi bi-house-door"></i> Home
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="./inicio.html">
+                        <span class="material-icons-outlined">inventory_2</span> Despesas
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="./duvidas.html">
+                        <span class="material-icons-outlined">category</span> Educação
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="./simulador.html">
+                        <span class="material-icons-outlined">poll</span> Simulador
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <main>
+            <form action="#" id="financeForm">
+                <div>
+                    <label for="financeForm-capital">Capital: </label>
+                    <input type="text" name="capital" id="financeForm-capital">
+                </div>
+                <div>
+                    <label for="financeForm-initial">Entrada: </label>
+                    <input type="text" name="initial" id="financeForm-initial">
+                </div>
+                <div>
+                    <label for="financeForm-rate">Taxa: </label>
+                    <input type="text" name="rate" id="financeForm-rate">
+                </div>
+                <div>
+                    <label for="financeForm-time">Tempo: </label>
+                    <input type="text" name="time" id="financeForm-time">
+                </div>
+                <button type="submit">Simular</button>
+            </form>
+            <section id="financeOutput">
+                <div>
+                    <p>Capital: <span id="financeOutput-capital"></span></p>
+                    <p>Valor de Entrada: <span id="financeOutput-initial"></span></p>
+                    <p>Taxa (<span id="financeOutput-rateUnit"></span>): <span id="financeOutput-rate"></span></p>
+                    <p>Tempo: <span id="financeOutput-time"></span></p>
+                </div>
+                <div>
+                    <p>Valor Total da Financia: <span id="financeOutput-totalValue"></span></p>
+                    <p>Valor aplicado (Capital - Entrada): <span id="financeOutput-inputValue"></span></p>
+                    <p>Diferença: <span id="financeOutput-difference"></span></p>
+                    <p>Valor da Parcela: <span id="financeOutput-portion"></span></p>
+                </div>
+            </section>
+        </main>
+    </body>
+    <script>
+        bank.finance.config({
+            formId: "financeForm",
+            outputIds: {
+                capital: "financeOutput-capital",
+                initial: "financeOutput-initial",
+                rate: "financeOutput-rate",
+                time: "financeOutput-time",
+                rateUnit: "financeOutput-rateUnit",
+                timeUnit: "financeOutput-timeUnit",
+                totalValue: "financeOutput-totalValue",
+                inputValue: "financeOutput-inputValue",
+                difference: "financeOutput-difference",
+                portion: "financeOutput-portion",
+                paymentHistory: "financeOutput-paymentHistory"
+            },
+            zeroErrorCallback: zeroCallBack,
+            resetInputs: true,
+            resetTypenUnit: true,
+            ignoreTimeZero: false
+        })
+    </script>
+</html>
